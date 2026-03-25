@@ -15,43 +15,43 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a class="nav-link active" onclick="showTab('dashboard')">
+                    <a class="nav-link active" data-tab="dashboard" onclick="showTab('dashboard')">
                         <span class="nav-icon">📊</span>
                         Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="showTab('productos')">
+                    <a href="#" class="nav-link" data-tab="productos" onclick="showTab('productos')">
                         <span class="nav-icon">📦</span>
                         Nuevo producto
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="showTab('movimientos')">
+                    <a href="#" class="nav-link" data-tab="movimientos" onclick="showTab('movimientos')">
                         <span class="nav-icon">📋</span>
                         Movimientos
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="showTab('inventario')">
+                    <a href="#" class="nav-link" data-tab="inventario" onclick="showTab('inventario')">
                         <span class="nav-icon">📊</span>
                         Inventario
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="showTab('reportes')">
+                    <a href="#" class="nav-link" data-tab="reportes" onclick="showTab('reportes')">
                         <span class="nav-icon">📈</span>
                         Reportes
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="showTab('buscar')">
+                    <a href="#" class="nav-link" data-tab="buscar" onclick="showTab('buscar')">
                         <span class="nav-icon">🔍</span>
                         Buscar
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" onclick="showTab('configuracion')">
+                    <a href="#" class="nav-link" data-tab="configuracion" onclick="showTab('configuracion')">
                         <span class="nav-icon">⚙️</span>
                         Configuración
                     </a>

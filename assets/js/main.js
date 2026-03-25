@@ -5,7 +5,7 @@ let autocompleteTimeout;
 function initializeApp() {
     setDefaultDates();
     // loadListas();
-    loadDashboard();
+    // loadDashboard();
     showTab('dashboard');
 }
 
@@ -28,10 +28,23 @@ function showTab(tabName) {
         link.classList.remove('active');
     });
 
-    document.getElementById(tabName).classList.add('active');
-    event.target.classList.add('active');
+    // ----
+    const content = document.getElementById(tabName);
+    if(content) content.classList.add('active');
 
+    const activeLink = document.querySelector(`.nav-link[data-tab="${tabName}"]`);
+    if(activeLink) activeLink.classList.add('active');
+
+    // -----
     currentTab = tabName;
+
+    window.location.hash = tabName;
+
+    // --ERROR
+    // document.getElementById(tabName).classList.add('active');
+    // event.target.classList.add('active');
+    // -- ERROR
+
 
     switch (tabName) {
         case 'dashboard':
@@ -44,34 +57,31 @@ function showTab(tabName) {
 }
 
 function loadDashboard() {
-    fetch('/api/productos')
+    fetch('includes/get_stats.php')
         .then(res => res.json())
         .then(data => {
             console.log(data)
-            const statsGrid = document.getElementById('statsGrid');
-            statsGrid.innerHTML = `
-          <div class="stat-card">
-            <div class="stat-value">${data.teclados.length}</div>
-            <div class="stat-label">Teclados </div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">${data.tintas.length}</div>
-            <div class="stat-label">Tintas</div>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">${data.externalCases.length}</div>
-            <div class="stat-label">External Cases</div>
-            <span class="ctn-text"><span class="txt1">[${data.externalCases[0].stock}]</span><span class="txt2">[${data.externalCases[1].stock}]</span></span>
-          </div>
-          <div class="stat-card">
-            <div class="stat-value">${data.stockBajo}</div>
-            <div class="stat-label">Stock Bajo</div>
-          </div>
-        `;
+        //     const statsGrid = document.getElementById('statsGrid');
+        //     statsGrid.innerHTML = `
+        //   <div class="stat-card">
+        //     <div class="stat-value">${data.teclados.length}</div>
+        //     <div class="stat-label">Teclados </div>
+        //   </div>
+        //   <div class="stat-card">
+        //     <div class="stat-value">${data.tintas.length}</div>
+        //     <div class="stat-label">Tintas</div>
+        //   </div>
+        //   <div class="stat-card">
+        //     <div class="stat-value">${data.externalCases.length}</div>
+        //     <div class="stat-label">External Cases</div>
+        //     <span class="ctn-text"><span class="txt1">[${data.externalCases[0].stock}]</span><span class="txt2">[${data.externalCases[1].stock}]</span></span>
+        //   </div>
+        //   <div class="stat-card">
+        //     <div class="stat-value">${data.stockBajo}</div>
+        //     <div class="stat-label">Stock Bajo</div>
+        //   </div>
+        // `;
         });
-    // }).withFailureHandler(error => {
-    //     showMessage('statsGrid', 'Error al cargar dashboard: ' + error, 'error');
-    // }).obtenerResumen();
 }
 
 // function loadListas() {
@@ -693,7 +703,7 @@ document.addEventListener('keydown', function (event) {
 
         switch (currentTab) {
             case 'dashboard':
-                loadDashboard();
+                // loadDashboard();
                 break;
             case 'inventario':
                 mostrarStock();

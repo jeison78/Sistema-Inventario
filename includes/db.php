@@ -1,10 +1,15 @@
 <?php
-$mysqli = new mysqli("localhost", "root", "", "inventario");
 
-if ($mysqli->connect_error) {
-    die("Error de conexión" . $mysqli->connect_error);
-} else {
-    die("Conexión exitosa");
-};
+$servidor = "localhost";
+$usuario = "root";
+$password = "";
+$bd = "inventario";
 
-$mysqli->set_charset("utf8mb4");
+
+$conet = new mysqli($servidor, $usuario, $password, $bd);
+
+if (!$conet) {
+    die("Error de conexión" . mysqli_connect_error());
+}
+
+mysqli_set_charset($conet, "utf8mb4");
