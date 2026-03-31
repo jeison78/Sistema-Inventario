@@ -1,28 +1,10 @@
-<?php require_once 'includes/lateral.php'; ?>
+<?php
+require_once 'includes/lateral.php';
+// require_once 'includes/db.php';
+require_once 'includes/helpers.php';
+?>
 
 <div class="main-content">
-    <div id="dashboard" class="tab-content active">
-        <div class="content-header">
-            <h2>Dashboard General</h2>
-        </div>
-        <div class="content-body">
-            <div class="stats-grid" id="statsGrid"></div>
-            <div class="card">
-                <div class="card-header">Alertas de Stock</div>
-                <div class="card-body">
-                    <div class="actions">
-                        <button class="btn btn-primary" onclick="loadDashboard()">
-                            Actualizar Dashboard
-                        </button>
-                        <button class="btn btn-warning" onclick="showStockAlerts()">
-                            Ver Alertas de Stock
-                        </button>
-                    </div>
-                    <div id="alertsContainer"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <div id="productos" class="tab-content">
         <div class="content-header">
@@ -66,63 +48,37 @@
                     </form>
                     <div id="msgProd"></div>
                 </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="movimientos" class="tab-content">
-        <div class="content-header">
-            <h2>Registro de Movimientos</h2>
-        </div>
-        <div class="content-body">
-            <div class="card">
-                <div class="card-header">Nuevo Movimiento</div>
-                <div class="card-body">
-                    <form id="formMovimiento" onsubmit="registrarMovimiento(event)">
-                        <div class="form-grid">
-                            <div class="form-group">
-                                <label for="codigoMov">Código del Producto *</label>
-                                <div class="autocomplete-container">
-                                    <input id="codigoMov" type="text" placeholder="Código del producto" required
-                                        onkeyup="buscarProductoAutocompletado()"
-                                        onblur="ocultarAutocompletado()"
-                                        onfocus="mostrarAutocompletado()">
-                                    <div id="autocompleteDropdown" class="autocomplete-dropdown"></div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="fechaMov">Fecha *</label>
-                                <input id="fechaMov" type="date" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="tipoMov">Tipo de Movimiento *</label>
-                                <select id="tipoMov" required onchange="handleTipoChange()">
-                                    <option value="INGRESO">Ingreso</option>
-                                    <option value="SALIDA">Salida</option>
-                                    <option value="AJUSTE_POSITIVO">Ajuste Positivo</option>
-                                    <option value="AJUSTE_NEGATIVO">Ajuste Negativo</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="cantMov">Cantidad *</label>
-                                <input id="cantMov" type="number" min="0.01" step="0.01" placeholder="Cantidad" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="obsMov">Observaciones</label>
-                                <textarea id="obsMov" placeholder="Observaciones opcionales" rows="3"></textarea>
-                            </div>
-                        </div>
-                        <div class="actions">
-                            <button type="submit" class="btn btn-success">
-                                Guardar Movimiento
-                            </button>
-                            <button type="button" class="btn btn-secondary" onclick="limpiarFormMovimiento()">
-                                Limpiar
-                            </button>
-                        </div>
-                    </form>
-                    <div id="msgMov"></div>
-                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Categoría</th>
+                            <th>marca</th>
+                            <th>modelo</th>
+                            <th>color</th>
+                            <th>precio</th>
+                            <th>stock</th>
+                            <th>Fecha Registro</th>
+                            <!-- <th>Fecha Actualización</th> -->
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $productos = listarProductos($conect) ?>
+                        <?php while ($row = $productos->fetch_assoc()) : ?>
+                            <tr>
+                                <td><?= $row['nombre'] ?></td>
+                                <td><?= $row['categoria'] ?></td>
+                                <td><?= $row['marca'] ?></td>
+                                <td><?= $row['modelo'] ?></td>
+                                <td><?= $row['color'] ?></td>
+                                <td><?= $row['precio'] ?></td>
+                                <td><?= $row['stock'] ?></td>
+                                <td><?= $row['fecha'] ?></td>
+                            </tr>
+                        <?php endwhile ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
@@ -133,73 +89,96 @@
         </div>
         <div class="content-body">
             <div class="card">
-                <div class="card-header">Stock Actual</div>
+                <div class="card-header">Registrar Venta</div>
                 <div class="card-body">
-                    <div class="actions">
-                        <button class="btn btn-primary" onclick="mostrarStock()">
-                            Actualizar Stock
-                        </button>
-                        <button class="btn btn-success" onclick="exportarStock()">
-                            Exportar CSV
-                        </button>
-                        <button class="btn btn-warning" onclick="mostrarAlertas()">
-                            Solo Alertas
-                        </button>
-                    </div>
-                    <div id="loading" class="loading">Cargando inventario...</div>
-                    <div class="table-container">
-                        <div id="stockTable"></div>
-                    </div>
+                    <form id="formProducto" onsubmit="registrarProducto(event)">
+                        <div class="form-grid">
+                            <div class="form-group">
+                                <label for="codigoProd">Código *</label>
+                                <input id="codigoProd" type="text" placeholder="Código único del producto" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="nombreProd">Nombre *</label>
+                                <input id="nombreProd" type="text" placeholder="Nombre del producto" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="unidadProd">Unidad de Medida</label>
+                                <select id="unidadProd" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="grupoProd">Categoria</label>
+                                <select id="grupoProd" required></select>
+                            </div>
+                            <div class="form-group">
+                                <label for="stockMinProd">Stock Mínimo</label>
+                                <input id="stockMinProd" type="number" min="0" value="0">
+                            </div>
+                        </div>
+                        <div class="actions">
+                            <button type="submit" class="btn btn-success">
+                                Registrar Producto
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="limpiarFormProducto()">
+                                Limpiar
+                            </button>
+                        </div>
+                    </form>
+                    <div id="msgProd"></div>
                 </div>
+                <table class="tbl-inventario">
+                    <thead>
+                        <tr>
+                            <th>Producto</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Descuento</th>
+                            <th>Total</th>
+                            <th>Fecha</th>
+                            <!-- <th>Acciones</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php $ventas = listarVentas($conect) ?>
+                        <?php while ($row = $ventas->fetch_assoc()) : ?>
+                            <tr>
+                                <td><?= $row['producto'] ?></td>
+                                <td><?= $row['cantidad'] ?></td>
+                                <td><?= $row['precio'] ?></td>
+                                <td><?= $row['descuento'] ?></td>
+                                <td><?= $row['total'] ?></td>
+                                <td><?= $row['fecha'] ?></td>
+                            </tr>
+                        <?php endwhile ?>
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 
-    <div id="reportes" class="tab-content">
+    <!-- <div id="dashboard" class="tab-content active">
         <div class="content-header">
-            <h2>Reportes y Análisis</h2>
+            <h2>Dashboard General</h2>
         </div>
         <div class="content-body">
+            <div class="stats-grid" id="statsGrid"></div>
             <div class="card">
-                <div class="card-header">Historial de Movimientos</div>
+                <div class="card-header">Alertas de Stock</div>
                 <div class="card-body">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label for="fechaDesde">Fecha Desde</label>
-                            <input id="fechaDesde" type="date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="fechaHasta">Fecha Hasta</label>
-                            <input id="fechaHasta" type="date" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="filtroTipo">Filtrar por Tipo</label>
-                            <select id="filtroTipo">
-                                <option value="">Todos los movimientos</option>
-                                <option value="INGRESO">Solo Ingresos</option>
-                                <option value="SALIDA">Solo Salidas</option>
-                                <option value="AJUSTE_POSITIVO">Solo Ajustes Positivos</option>
-                                <option value="AJUSTE_NEGATIVO">Solo Ajustes Negativos</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="actions">
-                        <button class="btn btn-primary" onclick="mostrarHistorial()">
-                            Generar Reporte
+                        <button class="btn btn-primary" onclick="loadDashboard()">
+                            Actualizar Dashboard
                         </button>
-                        <button class="btn btn-success" onclick="exportarReporte()">
-                            Exportar Reporte
+                        <button class="btn btn-warning" onclick="showStockAlerts()">
+                            Ver Alertas de Stock
                         </button>
                     </div>
-                    <div class="table-container">
-                        <div id="historialTable"></div>
-                    </div>
+                    <div id="alertsContainer"></div>
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div id="buscar" class="tab-content">
+    <!-- <div id="buscar" class="tab-content">
         <div class="content-header">
             <h2>Búsqueda de Productos</h2>
         </div>
@@ -227,35 +206,8 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> -->
 
-    <div id="configuracion" class="tab-content">
-        <div class="content-header">
-            <h2>Configuración del Sistema</h2>
-        </div>
-        <div class="content-body">
-            <div class="card">
-                <div class="card-header">Herramientas de Administración</div>
-                <div class="card-body">
-                    <div class="actions">
-                        <button class="btn btn-info" onclick="validarIntegridad()">
-                            Validar Integridad
-                        </button>
-                        <button class="btn btn-success" onclick="inicializarSistema()">
-                            Inicializar Sistema
-                        </button>
-                        <button class="btn btn-warning" onclick="limpiarTodosFormularios()">
-                            Limpiar Todo
-                        </button>
-                        <button class="btn btn-danger" onclick="confirmarReset()">
-                            Reset Sistema
-                        </button>
-                    </div>
-                    <div id="configResults"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
 
 <?php require_once 'includes/footer.php'; ?>

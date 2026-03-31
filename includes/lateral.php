@@ -4,7 +4,6 @@
 <head>
     <base target="_top">
     <link rel="stylesheet" href="assets/css/style.css">
-    <link rel="stylesheet" href="">
 </head>
 
 <body onload="initializeApp()">
@@ -15,30 +14,30 @@
             </div>
             <ul class="nav-menu">
                 <li class="nav-item">
-                    <a class="nav-link active" data-tab="dashboard" onclick="showTab('dashboard')">
-                        <span class="nav-icon">📊</span>
-                        Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-tab="productos" onclick="showTab('productos')">
+                    <a href="javascrip:void(0)" class="nav-link" data-tab="productos" onclick="showTab('productos')">
                         <span class="nav-icon">📦</span>
                         Nuevo producto
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="#" class="nav-link" data-tab="movimientos" onclick="showTab('movimientos')">
-                        <span class="nav-icon">📋</span>
-                        Movimientos
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="#" class="nav-link" data-tab="inventario" onclick="showTab('inventario')">
+                    <a href="javascript:void(0)" class="nav-link" data-tab="inventario" onclick="showTab('inventario')">
                         <span class="nav-icon">📊</span>
                         Inventario
                     </a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
+                    <a class="nav-link active" data-tab="dashboard" onclick="showTab('dashboard')">
+                        <span class="nav-icon">📊</span>
+                        Dashboard
+                    </a>
+                </li> -->
+                <!-- <li class="nav-item">
+                    <a href="#" class="nav-link" data-tab="movimientos" onclick="showTab('movimientos')">
+                        <span class="nav-icon">📋</span>
+                        Movimientos
+                    </a>
+                </li> -->
+                <!-- <li class="nav-item">
                     <a href="#" class="nav-link" data-tab="reportes" onclick="showTab('reportes')">
                         <span class="nav-icon">📈</span>
                         Reportes
@@ -55,6 +54,6 @@
                         <span class="nav-icon">⚙️</span>
                         Configuración
                     </a>
-                </li>
+                </li> -->
             </ul>
         </nav>

@@ -1,60 +1,54 @@
-let currentTab = 'dashboard';
-let searchTimeout;
-let autocompleteTimeout;
+    let currentTab = 'productos';
+    let searchTimeout;
+    let autocompleteTimeout;
 
-function initializeApp() {
-    setDefaultDates();
-    // loadListas();
-    // loadDashboard();
-    showTab('dashboard');
-}
+    function initializeApp() {
 
-function setDefaultDates() {
-    const today = new Date();
-    const monthAgo = new Date();
-    monthAgo.setMonth(monthAgo.getMonth() - 1);
-
-    document.getElementById("fechaMov").valueAsDate = today;
-    document.getElementById("fechaDesde").valueAsDate = monthAgo;
-    document.getElementById("fechaHasta").valueAsDate = today;
-}
-
-function showTab(tabName) {
-    document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove('active');
-    });
-
-    document.querySelectorAll('.nav-link').forEach(link => {
-        link.classList.remove('active');
-    });
-
-    // ----
-    const content = document.getElementById(tabName);
-    if(content) content.classList.add('active');
-
-    const activeLink = document.querySelector(`.nav-link[data-tab="${tabName}"]`);
-    if(activeLink) activeLink.classList.add('active');
-
-    // -----
-    currentTab = tabName;
-
-    window.location.hash = tabName;
-
-    // --ERROR
-    // document.getElementById(tabName).classList.add('active');
-    // event.target.classList.add('active');
-    // -- ERROR
-
-
-    switch (tabName) {
-        case 'dashboard':
-            loadDashboard();
-            break;
-        case 'inventario':
-            mostrarStock();
-            break;
+        let tabtoLoad = 'productos';
+        if(window.location.hash) {
+            tabtoLoad = window.location.hash.substring(1);
+        }
+        showTab(tabtoLoad);
     }
-}
+
+
+    function showTab(tabName) {
+        if(!tabName) tabName = 'productos';
+        
+        document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+        
+        document.querySelectorAll('.nav-link').forEach(link => link.classList.remove('active'));
+        
+        // ----
+        const content = document.getElementById(tabName);
+        if(content) content.classList.add('active');
+        
+        const activeLink = document.querySelector(`.nav-link[data-tab="${tabName}"]`);
+        if(activeLink) activeLink.classList.add('active');
+        
+        // -----
+        currentTab = tabName;
+        
+        window.history.replaceState(null, null, `#${tabName}`);
+
+        // --ERROR
+        // document.getElementById(tabName).classList.add('active');
+        // event.target.classList.add('active');
+        // -- ERROR
+
+
+        switch (tabName) {
+            // case 'dashboard':
+            //     loadDashboard();
+            //     break;
+            case 'productos':
+                // loadDashboard();
+                break;
+            case 'inventario':
+                // loadInventario();
+                break;
+        }
+    }
 
 function loadDashboard() {
     fetch('includes/get_stats.php')
@@ -82,45 +76,6 @@ function loadDashboard() {
         //   </div>
         // `;
         });
-}
-
-// function loadListas() {
-//     google.script.run.withSuccessHandler(data => {
-//         const unidadSelect = document.getElementById("unidadProd");
-//         const grupoSelect = document.getElementById("grupoProd");
-
-//         unidadSelect.innerHTML = "";
-//         grupoSelect.innerHTML = "";
-
-//         data.unidades.forEach(u => {
-//             unidadSelect.innerHTML += `<option value="${u}">${u}</option>`;
-//         });
-//         data.grupos.forEach(g => {
-//             grupoSelect.innerHTML += `<option value="${g}">${g}</option>`;
-//         });
-//     }).withFailureHandler(error => {
-//         console.error('Error loading lists:', error);
-//     }).obtenerListas();
-// }
-
-function buscarProductoAutocompletado() {
-    clearTimeout(autocompleteTimeout);
-    const input = document.getElementById("codigoMov");
-    const dropdown = document.getElementById("autocompleteDropdown");
-    const codigo = input.value.trim().toUpperCase();
-
-    if (codigo.length === 0) {
-        dropdown.style.display = "none";
-        return;
-    }
-
-    // autocompleteTimeout = setTimeout(() => {
-    //     google.script.run.withSuccessHandler(productos => {
-    //         mostrarAutocompletado(productos);
-    //     }).withFailureHandler(error => {
-    //         console.error('Error en autocompletado:', error);
-    //     }).buscarProductoPorCodigo(codigo);
-    // }, 200);
 }
 
 function mostrarAutocompletado(productos = []) {
@@ -171,16 +126,6 @@ function registrarProducto(event) {
         showMessage('msgProd', 'Código y nombre son campos obligatorios', 'error');
         return;
     }
-
-    // google.script.run.withSuccessHandler(mensaje => {
-    //     showMessage('msgProd', mensaje, mensaje.includes('correctamente') ? 'success' : 'error');
-    //     if (mensaje.includes('correctamente')) {
-    //         document.getElementById('formProducto').reset();
-    //         document.getElementById("stockMinProd").value = "0";
-    //     }
-    // }).withFailureHandler(error => {
-    //     showMessage('msgProd', 'Error: ' + error, 'error');
-    // }).registrarProducto(producto);
 }
 
 function registrarMovimiento(event) {
@@ -199,15 +144,6 @@ function registrarMovimiento(event) {
         return;
     }
 
-    // google.script.run.withSuccessHandler(mensaje => {
-    //     showMessage('msgMov', mensaje, mensaje.includes('correctamente') ? 'success' : 'error');
-    //     if (mensaje.includes('correctamente')) {
-    //         document.getElementById('formMovimiento').reset();
-    //         document.getElementById("fechaMov").valueAsDate = new Date();
-    //     }
-    // }).withFailureHandler(error => {
-    //     showMessage('msgMov', 'Error: ' + error, 'error');
-    // }).registrarMovimiento(movimiento);
 }
 
 function handleTipoChange() {
@@ -237,11 +173,6 @@ function buscarProducto() {
         return;
     }
 
-    // google.script.run.withSuccessHandler(data => {
-    //     displaySearchResults(data);
-    // }).withFailureHandler(error => {
-    //     showMessage('resultadosBusqueda', 'Error en la búsqueda: ' + error, 'error');
-    // }).buscarProducto(texto);
 }
 
 function buscarEnTiempoReal() {
@@ -309,21 +240,6 @@ function displaySearchResults(data) {
     html += '</tbody></table>';
     container.innerHTML = html;
 }
-
-// function mostrarStock() {
-//     const loading = document.getElementById("loading");
-//     const container = document.getElementById("stockTable");
-
-//     loading.style.display = "block";
-
-//     google.script.run.withSuccessHandler(data => {
-//         loading.style.display = "none";
-//         displayStockTable(data, container);
-//     }).withFailureHandler(error => {
-//         loading.style.display = "none";
-//         showMessage('stockTable', 'Error al cargar stock: ' + error, 'error');
-//     }).obtenerStock();
-// }
 
 function displayStockTable(data, container) {
     if (data.length === 0) {
@@ -709,11 +625,5 @@ document.addEventListener('keydown', function (event) {
                 mostrarStock();
                 break;
         }
-    }
-});
-
-document.addEventListener('click', function (event) {
-    if (!event.target.closest('.autocomplete-container')) {
-        document.getElementById("autocompleteDropdown").style.display = "none";
     }
 });

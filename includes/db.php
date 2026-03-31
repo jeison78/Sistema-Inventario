@@ -6,10 +6,10 @@ $password = "";
 $bd = "inventario";
 
 
-$conet = new mysqli($servidor, $usuario, $password, $bd);
+$conect = new mysqli($servidor, $usuario, $password, $bd);
 
-if (!$conet) {
+if (!$conect) {
     die("Error de conexión" . mysqli_connect_error());
 }
 
-mysqli_set_charset($conet, "utf8mb4");
+mysqli_set_charset($conect, "utf8mb4");
